@@ -2,8 +2,11 @@ import ButtonLogin from "@/components/ButtonLogin";
 import HeroImage from "@/assets/productDemo.jpeg";
 
 import Image from "next/image";
+import { auth } from "@/auth";
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth();
+
   return (
     <main>
       {/* HEADER */}
@@ -15,7 +18,7 @@ export default function Home() {
             <a className="lint link-hover">FAQ</a>
           </div>
           <div>
-            <ButtonLogin isLoggedIn={true} name="John Doe" />
+            <ButtonLogin session={session} />
           </div>
         </div>
       </section>
@@ -35,9 +38,7 @@ export default function Home() {
               Create a feedback board in minutes, prioritize features, and build
               products your customer will love.
             </p>
-            <ButtonLogin isLoggedIn={true} name="Prakash">
-              Dashboard
-            </ButtonLogin>
+            <ButtonLogin session={session}>Dashboard</ButtonLogin>
           </div>
         </div>
       </section>
@@ -71,11 +72,7 @@ export default function Home() {
                 <span className="text-primary">Unlimited</span> file uploads
               </li>
             </ul>
-            <ButtonLogin
-              isLoggedIn={true}
-              extraStyle="w-full mt-8"
-              name={"Prakash"}
-            />
+            <ButtonLogin session={session} extraStyle="w-full mt-8" />
           </div>
         </div>
       </section>
