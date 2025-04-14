@@ -63,3 +63,46 @@ export async function POST(req) {
     );
   }
 }
+
+export async function DELETE(req) {
+  try {
+    const { searchParams } = req.nextUrl;
+    const boardId = searchParams.get("boardId");
+
+    if (!boardId) {
+      return NextResponse.json(
+        { message: "Board ID is required" },
+        { status: 400 }
+      );
+    }
+
+    // Authenticate user
+    const session = await auth();
+    if (!session) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    // Connect to MongoDB
+    await connectMongo();
+    await Board.deleteOne({
+      _id: boardId,
+      userId: session.user.id,
+    });
+
+    // Find user
+    const user = await User.findById(session.user.id);
+    user.boards = user.boards.filter((id) => id.toString() !== boardId);
+
+    user.save();
+
+    return NextResponse.json(
+      { message: "Board deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { message: error.message || "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
