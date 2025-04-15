@@ -1,5 +1,5 @@
-const { auth } = require("@/auth");
-const { redirect } = require("next/navigation");
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 export default async function LayoutPrivate({ children }) {
   const session = await auth();

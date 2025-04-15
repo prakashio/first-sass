@@ -1,5 +1,7 @@
 import { auth } from "@/auth";
+import ButtonCheckout from "@/components/ButtonCheckout";
 import ButtonLogout from "@/components/ButtonLogout";
+import ButtonPortal from "@/components/ButtonPortal";
 import FormNewBoard from "@/components/FormNewBoard";
 import connectMongo from "@/libs/mongoose";
 import User from "@/models/User";
@@ -19,7 +21,8 @@ export default async function Dashboard() {
     <main className="bg-base-200 min-h-screen">
       {/* HEADER */}
       <section className="bg-base-100">
-        <div className="px-5 py-3 flex justify-end">
+        <div className="px-5 py-3 flex justify-between">
+          {user.hasAccess ? <ButtonPortal /> : <ButtonCheckout />}
           <ButtonLogout />
         </div>
       </section>

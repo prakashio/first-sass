@@ -35,6 +35,13 @@ export async function POST(req) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
+    if (!user.hasAccess) {
+      return NextResponse.json(
+        { message: "Please subscribe first!" },
+        { status: 403 }
+      );
+    }
+
     // Create board
     const board = await Board.create({
       userId: user._id,
@@ -84,13 +91,22 @@ export async function DELETE(req) {
 
     // Connect to MongoDB
     await connectMongo();
+
+    // Find user
+    const user = await User.findById(session.user.id);
+
+    if (!user.hasAccess) {
+      return NextResponse.json(
+        { message: "Please subscribe first!" },
+        { status: 403 }
+      );
+    }
+
     await Board.deleteOne({
       _id: boardId,
       userId: session.user.id,
     });
 
-    // Find user
-    const user = await User.findById(session.user.id);
     user.boards = user.boards.filter((id) => id.toString() !== boardId);
 
     user.save();

@@ -1,5 +1,6 @@
 import { Inter } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 
@@ -18,6 +19,7 @@ export default function RootLayout({ children }) {
           <Toaster />
         </div>
         {children}
+        <SpeedInsights />
       </body>
     </html>
   );
